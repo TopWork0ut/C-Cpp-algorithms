@@ -16,15 +16,15 @@ int main()
 
     cout << "-----------------------\n\n";
     cout << "RedBlack Tree \n\n";
-//  (Left, Root, Right)
+    //  (Left, Root, Right)
     cout << "Inorder Traversal \n";
     tree.inorder();
 
-//  (Root, Left, Right)
+    //  (Root, Left, Right)
     cout << "\n\nPreorder Traversal \n";
     tree.preorder();
 
-//  (Left, Right, Root)
+    //  (Left, Right, Root)
     cout << "\n\nPostOrder Traversal \n";
     tree.postorder();
 
@@ -51,11 +51,11 @@ int main()
     cout <<"\n\nAfter DELETING";
     root = deleteNode(root, 10);
 
-//  (Root, Left, Right)
+    //  (Root, Left, Right)
     cout << "\n\nPreorder Traversal \n";
     preorder(root);
 
-//  (Left, Right, Root)
+    //  (Left, Right, Root)
     cout << "\n\nPostorder Traversal \n";
     postorder(root);
 

@@ -1,8 +1,6 @@
 #include "RedBlackTree.h"
 
-
-void inorderPrint(RBNode *root)
-{
+void inorderPrint(RBNode *root) {
     if (root == nullptr)
         return;
 
@@ -11,8 +9,7 @@ void inorderPrint(RBNode *root)
     inorderPrint(root->right);
 }
 
-void preorderPrint(RBNode *root)
-{
+void preorderPrint(RBNode *root) {
     if (root == nullptr)
         return;
 
@@ -21,8 +18,7 @@ void preorderPrint(RBNode *root)
     inorderPrint(root->right);
 }
 
-void postorderPrint(RBNode *root)
-{
+void postorderPrint(RBNode *root) {
     if (root == nullptr)
         return;
 
@@ -43,181 +39,146 @@ void RedBlackTree::postorder() {
     postorderPrint(root);
 }
 
-void RedBlackTree::leftRotate(RBNode *&root, RBNode *&pt)
-{
-    RBNode *pt_right = pt->right;
+void RedBlackTree::leftRotate(RBNode *&root, RBNode *&node) {
+    RBNode *node_right = node->right;
 
-    pt->right = pt_right->left;
+    node->right = node_right->left;
 
-    if (pt->right != nullptr)
-        pt->right->parent = pt;
+    if (node->right != nullptr)
+        node->right->parent = node;
 
-    pt_right->parent = pt->parent;
+    node_right->parent = node->parent;
 
-    if (pt->parent == nullptr)
-        root = pt_right;
+    if (node->parent == nullptr)
+        root = node_right;
 
-    else if (pt == pt->parent->left)
-        pt->parent->left = pt_right;
-
-    else
-        pt->parent->right = pt_right;
-
-    pt_right->left = pt;
-    pt->parent = pt_right;
-}
-
-void RedBlackTree::rightRotate(RBNode *&root, RBNode *&pt)
-{
-    RBNode *pt_left = pt->left;
-
-    pt->left = pt_left->right;
-
-    if (pt->left != nullptr)
-        pt->left->parent = pt;
-
-    pt_left->parent = pt->parent;
-
-    if (pt->parent == nullptr)
-        root = pt_left;
-
-    else if (pt == pt->parent->left)
-        pt->parent->left = pt_left;
+    else if (node == node->parent->left)
+        node->parent->left = node_right;
 
     else
-        pt->parent->right = pt_left;
+        node->parent->right = node_right;
 
-    pt_left->right = pt;
-    pt->parent = pt_left;
+    node_right->left = node;
+    node->parent = node_right;
 }
 
-// This function fixes violations
-// caused by BST insertion
-void RedBlackTree::fixBadNodePosition(RBNode *&root, RBNode *&pt)
-{
-    RBNode *parent_pt = nullptr;
-    RBNode *grand_parent_pt = nullptr;
+void RedBlackTree::rightRotate(RBNode *&root, RBNode *&node) {
+    RBNode *node_left = node->left;
 
-    while ((pt != root) && (pt->color != BLACK) &&
-           (pt->parent->color == RED))
+    node->left = node_left->right;
+
+    if (node->left != nullptr)
+        node->left->parent = node;
+
+    node_left->parent = node->parent;
+
+    if (node->parent == nullptr)
+        root = node_left;
+
+    else if (node == node->parent->left)
+        node->parent->left = node_left;
+
+    else
+        node->parent->right = node_left;
+
+    node_left->right = node;
+    node->parent = node_left;
+}
+
+
+void RedBlackTree::fixBadNodePosition(RBNode *&root, RBNode *&node) {
+    RBNode *parent_node = nullptr;
+    RBNode *grand_parent_node = nullptr;
+
+    while ((node != root) && (node->color != BLACK) &&
+           (node->parent->color == RED))
     {
 
-        parent_pt = pt->parent;
-        grand_parent_pt = pt->parent->parent;
+        parent_node = node->parent;
+        grand_parent_node = node->parent->parent;
 
-        /* Case : A
-            Parent of pt is left child
-            of Grand-parent of pt */
-        if (parent_pt == grand_parent_pt->left)
+
+        if (parent_node == grand_parent_node->left)
         {
 
-            RBNode *uncle_pt = grand_parent_pt->right;
+            RBNode *uncle_node = grand_parent_node->right;
 
-            /* Case : 1
-            The uncle of pt is also red
-            Only Recoloring required */
-            if (uncle_pt != nullptr && uncle_pt->color ==
+            if (uncle_node != nullptr && uncle_node->color ==
                                        RED)
             {
-                grand_parent_pt->color = RED;
-                parent_pt->color = BLACK;
-                uncle_pt->color = BLACK;
-                pt = grand_parent_pt;
+                grand_parent_node->color = RED;
+                parent_node->color = BLACK;
+                uncle_node->color = BLACK;
+                node = grand_parent_node;
             }
 
             else
             {
-                /* Case : 2
-                pt is right child of its parent
-                Left-rotation required */
-                if (pt == parent_pt->right)
+                if (node == parent_node->right)
                 {
-                    leftRotate(root, parent_pt);
-                    pt = parent_pt;
-                    parent_pt = pt->parent;
+                    leftRotate(root, parent_node);
+                    node = parent_node;
+                    parent_node = node->parent;
                 }
 
-                /* Case : 3
-                pt is left child of its parent
-                Right-rotation required */
-                rightRotate(root, grand_parent_pt);
-                swap(parent_pt->color,
-                     grand_parent_pt->color);
-                pt = parent_pt;
+                rightRotate(root, grand_parent_node);
+                swap(parent_node->color,
+                     grand_parent_node->color);
+                node = parent_node;
             }
         }
 
-            /* Case : B
-            Parent of pt is right child
-            of Grand-parent of pt */
         else
         {
-            RBNode *uncle_pt = grand_parent_pt->left;
+            RBNode *uncle_pt = grand_parent_node->left;
 
-            /* Case : 1
-                The uncle of pt is also red
-                Only Recoloring required */
             if ((uncle_pt != nullptr) && (uncle_pt->color ==
                                           RED))
             {
-                grand_parent_pt->color = RED;
-                parent_pt->color = BLACK;
+                grand_parent_node->color = RED;
+                parent_node->color = BLACK;
                 uncle_pt->color = BLACK;
-                pt = grand_parent_pt;
+                node = grand_parent_node;
             }
             else
             {
-                /* Case : 2
-                pt is left child of its parent
-                Right-rotation required */
-                if (pt == parent_pt->left)
+                if (node == parent_node->left)
                 {
-                    rightRotate(root, parent_pt);
-                    pt = parent_pt;
-                    parent_pt = pt->parent;
+                    rightRotate(root, parent_node);
+                    node = parent_node;
+                    parent_node = node->parent;
                 }
 
-                /* Case : 3
-                pt is right child of its parent
-                Left-rotation required */
-                leftRotate(root, grand_parent_pt);
-                swap(parent_pt->color,
-                     grand_parent_pt->color);
-                pt = parent_pt;
+                leftRotate(root, grand_parent_node);
+                swap(parent_node->color,
+                     grand_parent_node->color);
+                node = parent_node;
             }
         }
     }
-
     root->color = BLACK;
 }
 
-void RedBlackTree::insertNode(const int &data)
-{
-    RBNode *pt = new RBNode(data);
-
-    root = RedBlackTreeInsert(root, pt);
-
-    fixBadNodePosition(root, pt);
+void RedBlackTree::insertNode(const int &data) {
+    RBNode *node = new RBNode(data);
+    root = RedBlackTreeInsert(root, node);
+    fixBadNodePosition(root, node);
 }
 
-RBNode* RedBlackTreeInsert(RBNode* root, RBNode *pt)
+RBNode* RedBlackTreeInsert(RBNode* root, RBNode *node)
 {
-    /* If the tree is empty, return a new node */
     if (root == nullptr)
-        return pt;
+        return node;
 
-    /* Otherwise, recur down the tree */
-    if (pt->data < root->data)
+    if (node->data < root->data)
     {
-        root->left = RedBlackTreeInsert(root->left, pt);
+        root->left = RedBlackTreeInsert(root->left, node);
         root->left->parent = root;
     }
-    else if (pt->data > root->data)
+    else if (node->data > root->data)
     {
-        root->right = RedBlackTreeInsert(root->right, pt);
+        root->right = RedBlackTreeInsert(root->right, node);
         root->right->parent = root;
     }
-
-    /* return the (unchanged) node pointer */
     return root;
 }

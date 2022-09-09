@@ -1,110 +1,97 @@
 #include "AVLTree.h"
 
-int height(AVLNode *N)
+int getHeightOfTheTree(AVLNode *node)
 {
-    if (N == nullptr)
+    if (node == nullptr) {
         return 0;
-    return N->height;
+    }
+    return node->height;
 }
 
-int max(int a, int b)
+int fintMaxValue(int valueOne, int valueTwo)
 {
-    return (a > b)? a : b;
+    return (valueOne > valueTwo)? valueOne : valueTwo;
 }
 
-AVLNode* newNode(int key)
+AVLNode* newNode(int data)
 {
     AVLNode* node = new AVLNode();
-    node->key = key;
+    node->data = data;
     node->left = nullptr;
     node->right = nullptr;
     node->height = 1;
     return(node);
 }
 
-AVLNode *rightRotate(AVLNode *y)
+AVLNode *rightRotate(AVLNode *grandParent)
 {
-    AVLNode *x = y->left;
-    AVLNode *z = x->right;
+    AVLNode *parent = grandParent->left;
+    AVLNode *z = parent->right;
 
-    x->right = y;
-    y->left = z;
+    parent->right = grandParent;
+    grandParent->left = z;
 
 
-    y->height = max(height(y->left),
-                    height(y->right)) + 1;
-    x->height = max(height(x->left),
-                    height(x->right)) + 1;
-    return x;
+    grandParent->height = fintMaxValue(getHeightOfTheTree(grandParent->left),getHeightOfTheTree(grandParent->right)) + 1;
+    parent->height = fintMaxValue(getHeightOfTheTree(parent->left),getHeightOfTheTree(parent->right)) + 1;
+    return parent;
 }
 
-AVLNode *leftRotate(AVLNode *x)
+AVLNode *leftRotate(AVLNode *grandParent)
 {
-    AVLNode *y = x->right;
-    AVLNode *z = y->left;
+    AVLNode *parent = grandParent->right;
+    AVLNode *child = parent->left;
 
 
-    y->left = x;
-    x->right = z;
+    parent->left = grandParent;
+    grandParent->right = child;
 
-    x->height = max(height(x->left),
-                    height(x->right)) + 1;
-    y->height = max(height(y->left),
-                    height(y->right)) + 1;
+    grandParent->height = fintMaxValue(getHeightOfTheTree(grandParent->left),getHeightOfTheTree(grandParent->right)) + 1;
+    parent->height = fintMaxValue(getHeightOfTheTree(parent->left),getHeightOfTheTree(parent->right)) + 1;
 
-    return y;
+    return parent;
 }
 
-int getBalance(AVLNode *difference)
+int getHeightDifference(AVLNode *difference)
 {
     if (difference == nullptr)
         return 0;
-    return height(difference->left) - height(difference->right);
+    return getHeightOfTheTree(difference->left) - getHeightOfTheTree(difference->right);
 }
 
-AVLNode* insert(AVLNode* node, int key)
+AVLNode* insert(AVLNode* node, int data)
 {
-
     if (node == nullptr)
-        return(newNode(key));
+        return(newNode(data));
 
-    if (key < node->key)
-        node->left = insert(node->left, key);
-    else if (key > node->key)
-        node->right = insert(node->right, key);
+    if (data < node->data)
+        node->left = insert(node->left, data);
+    else if (data > node->data)
+        node->right = insert(node->right, data);
     else
         return node;
 
-    node->height = 1 + max(height(node->left),
-                           height(node->right));
+    node->height = 1 + fintMaxValue(getHeightOfTheTree(node->left),getHeightOfTheTree(node->right));
 
-    int balance = getBalance(node);
+    int balance = getHeightDifference(node);
 
-
-
-    // Left Left Case
-    if (balance > 1 && key < node->left->key)
+    if (balance > 1 && data < node->left->data)
         return rightRotate(node);
 
-    // Right Right Case
-    if (balance < -1 && key > node->right->key)
+    if (balance < -1 && data > node->right->data)
         return leftRotate(node);
 
-    // Left Right Case
-    if (balance > 1 && key > node->left->key)
+    if (balance > 1 && data > node->left->data)
     {
         node->left = leftRotate(node->left);
         return rightRotate(node);
     }
 
-    // Right Left Case
-    if (balance < -1 && key < node->right->key)
+    if (balance < -1 && data < node->right->data)
     {
         node->right = rightRotate(node->right);
         return leftRotate(node);
     }
-
-
     return node;
 }
 
@@ -112,87 +99,67 @@ AVLNode * minValueNode(AVLNode* node)
 {
     AVLNode* current = node;
 
-
     while (current->left != nullptr)
         current = current->left;
 
     return current;
 }
 
-AVLNode* deleteNode(AVLNode* root, int key)
+AVLNode* deleteNode(AVLNode* root, int data)
 {
-    if (root == nullptr)
+    if (root == nullptr) {
         return root;
+    }
 
+    if ( data < root->data ) {
+        root->left = deleteNode(root->left, data);
+    }
 
-    if ( key < root->key )
-        root->left = deleteNode(root->left, key);
+    else if( data > root->data ) {
+        root->right = deleteNode(root->right, data);
+    }
 
-    else if( key > root->key )
-        root->right = deleteNode(root->right, key);
-
-    else
-    {
-        // node with only one child or no child
-        if( (root->left == nullptr) ||
-            (root->right == nullptr) )
-        {
-            AVLNode *temp = root->left ?
-                            root->left :
-                            root->right;
-
-            // No child case
-            if (temp == nullptr)
+    else {
+        if( (root->left == nullptr) || (root->right == nullptr) ) {
+            AVLNode *tempNode = root->left ? root->left : root->right;
+            if (tempNode == nullptr)
             {
-                temp = root;
+                tempNode = root;
                 root = nullptr;
             }
-            else // One child case
-                *root = *temp;
-            free(temp);
+            else
+                *root = *tempNode;
+            free(tempNode);
         }
-        else
-        {
+        else {
             AVLNode* temp = minValueNode(root->right);
 
-            root->key = temp->key;
+            root->data = temp->data;
 
-            root->right = deleteNode(root->right,
-                                     temp->key);
+            root->right = deleteNode(root->right,temp->data);
         }
     }
 
     if (root == nullptr)
         return root;
 
-    root->height = 1 + max(height(root->left),
-                           height(root->right));
+    root->height = 1 + fintMaxValue(getHeightOfTheTree(root->left),getHeightOfTheTree(root->right));
 
+    int balance = getHeightDifference(root);
 
-    int balance = getBalance(root);
-
-
-    // Left Left Case
-    if (balance > 1 &&
-        getBalance(root->left) >= 0)
+    if (balance > 1 && getHeightDifference(root->left) >= 0)
         return rightRotate(root);
 
-    // Left Right Case
-    if (balance > 1 &&
-        getBalance(root->left) < 0)
+    if (balance > 1 && getHeightDifference(root->left) < 0)
     {
         root->left = leftRotate(root->left);
         return rightRotate(root);
     }
 
-    // Right Right Case
-    if (balance < -1 &&
-        getBalance(root->right) <= 0)
+    if (balance < -1 && getHeightDifference(root->right) <= 0)
         return leftRotate(root);
 
-    // Right Left Case
-    if (balance < -1 &&
-        getBalance(root->right) > 0)
+    if (balance < -1 && getHeightDifference(root->right) > 0)
     {
         root->right = rightRotate(root->right);
         return leftRotate(root);
@@ -204,7 +171,7 @@ void preorder(AVLNode *root)
 {
     if(root != nullptr)
     {
-        cout << root->key << " ";
+        cout << root->data << " ";
         preorder(root->left);
         preorder(root->right);
     }
@@ -215,7 +182,7 @@ void inorder(AVLNode *root)
     if(root != nullptr)
     {
         inorder(root->left);
-        cout << root->key << " ";
+        cout << root->data << " ";
         inorder(root->right);
     }
 }
@@ -226,6 +193,6 @@ void postorder(AVLNode *root)
     {
         postorder(root->left);
         postorder(root->right);
-        cout << root->key << " ";
+        cout << root->data << " ";
     }
 }

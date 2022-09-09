@@ -1,28 +1,26 @@
-// C++ program to insert a node in AVL tree
 #include<bits/stdc++.h>
 using namespace std;
 
-// An AVL tree node
 class AVLNode
 {
 public:
-    int key;
+    int data;
     AVLNode *left;
     AVLNode *right;
     int height;
 };
 
-int height(AVLNode *N);
-int max(int a, int b);
+int getHeightOfTheTree(AVLNode *node);
+int fintMaxValue(int data1, int data2);
 
-AVLNode* newNode(int key);
-AVLNode *rightRotate(AVLNode *y);
-AVLNode *leftRotate(AVLNode *x);
+AVLNode* newNode(int data);
+AVLNode *rightRotate(AVLNode *node);
+AVLNode *leftRotate(AVLNode *node);
 
-int getBalance(AVLNode *difference);
-AVLNode* insert(AVLNode* node, int key);
+int getHeightDifference(AVLNode *difference);
+AVLNode* insert(AVLNode* node, int data);
 AVLNode * minValueNode(AVLNode* node);
-AVLNode* deleteNode(AVLNode* root, int key);
+AVLNode* deleteNode(AVLNode* root, int data);
 
 void inorder(AVLNode *root);
 void preorder(AVLNode *root);
