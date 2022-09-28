@@ -2,7 +2,7 @@
 
 ### Finding the minimum depth of a binary tree
 
-![Fisrt](/Lab2/assets/results/Binary-Tree-Minimum-Depth.png)
+![Fisrt](/Lab2/assets/Binary-Tree-Minimum-Depth.png)
 
 Given a binary tree, find its minimum depth. The minimum depth is the total number of nodes along the shortest path from the root node to the nearest end node.
 
