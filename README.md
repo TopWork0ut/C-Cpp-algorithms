@@ -1,14 +1,19 @@
 ## Second Lab 
 
-### Finding the minimum depth of a binary tree
+## Finding the minimum depth of a binary tree
+
 
 ![Fisrt](/Lab2/assets/Binary-Tree-Minimum-Depth.png)
 
+
 Given a binary tree, find its minimum depth. The minimum depth is the total number of nodes along the shortest path from the root node to the nearest end node.
+
 
 For example, the minimum depth of the following binary tree is 3. The shortest path is 1 —> 3 —> 6.
 
+
 To represent the graph, you should use the adjacency list, the data is read from the input.txt file
+
 
 input.txt contains:
 1 #tree root
@@ -17,7 +22,14 @@ input.txt contains:
 2,4
 …
 
-### Result
+## Result
 
 Minimum tree depth should be output to the output.txt file
+
+
+## Credits
+
+Queue code implementation in C language was taken from: 
+
+https://anupam-tech.medium.com/how-to-code-a-binary-tree-using-queue-implemented-using-linked-list-in-c-15c68741106c
 
