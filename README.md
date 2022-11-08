@@ -1,4 +1,5 @@
-## Fourth Lab 
+## The Fourth Lab 
+
 
 ## Electricians
 
@@ -8,13 +9,16 @@ You order the electric wire for connecting the poles from China, and it will tak
 
 (In other words - you need to find such a sequence of pole heights that the wire connecting their tops will be the longest)
 
+
 ## Input data:
 
 The first line contains w - the distance between the pillars. The second line contains N numbers describing the maximum possible height for each pillar (i.e. an array of heights).
 
+
 ## Output:
 
 The maximum possible required length of the wire with 2 digits after the decimal point.
+
 
 ## Constraints:
 
@@ -23,7 +27,8 @@ N < 50
 
 Of course, you must ignore various physical constraints ala wire sagging or wire consumption per connection
 
-### Examples:
+
+## Examples:
 In:
 2
 3 3 3
@@ -51,6 +56,7 @@ In:
 56 18 17 94 23 7 21 94 29 54 44 26 86 79 4 15 5 91 25 17 88 66 28 2 95 97 60 93 40 70 75 48 38 51 34 52 87 8 62 77 35 52 3 93 34 57 51 11 39 72
 Out:
 2738.18
+
 
 ## Solution
 
