@@ -8,22 +8,22 @@ You order the electric wire for connecting the poles from China, and it will tak
 
 (In other words - you need to find such a sequence of pole heights that the wire connecting their tops will be the longest)
 
-##Input data:
+## Input data:
 
 The first line contains w - the distance between the pillars. The second line contains N numbers describing the maximum possible height for each pillar (i.e. an array of heights).
 
-##Output:
+## Output:
 
 The maximum possible required length of the wire with 2 digits after the decimal point.
 
-##Constraints:
+## Constraints:
 
 w, heights[i] - integers in the range 1 ... 100
 N < 50
 
 Of course, you must ignore various physical constraints ala wire sagging or wire consumption per connection
 
-###Examples:
+### Examples:
 In:
 2
 3 3 3
@@ -52,7 +52,7 @@ In:
 Out:
 2738.18
 
-##Solution
+## Solution
 
 The greatest height will be when the hypotenuse of the square triangle (the distance between the vertices of the pillars) is the greatest. This can be done if one of the adjacent pillars is set to height 1, and the other is left with the same height. But we need to consider two cases. The first is when height 1 is for even numbers of posts, 2 for odd numbers. Of course, when the array starts with 1, we will take only for odd numbers.
 
